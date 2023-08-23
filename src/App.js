@@ -4,11 +4,13 @@ import Weather from "./Weather";
 function App() {
   return (
     <div className="App container">
-      <h1> Weather app </h1>
       <Weather />
       <footer>
         <p>
-          Coded by Gugulethu mdluli <a href="#">Open source code</a>
+          Coded by Gugulethu mdluli{" "}
+          <a href="https://github.com/GMDLULI/weather-app-react">
+            Open source code
+          </a>
         </p>
       </footer>
     </div>

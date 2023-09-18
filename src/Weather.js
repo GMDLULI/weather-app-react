@@ -10,6 +10,7 @@ export default function Weather(props) {
   function handleWeather(response) {
     console.log(response.data)
     setWeatherData({
+      date: "wednessday 19:00",
       temparature: response.data.temperature.current,
       wind: response.data.wind.speed,
       humidity: response.data.temperature.humidity,
@@ -23,7 +24,7 @@ export default function Weather(props) {
  
   if (ready) {
     return (
-      <div className="weather">
+      <div className="weather text-capitalize">
         <div className="contanier">
           <form>
             <Row>
@@ -37,7 +38,7 @@ export default function Weather(props) {
           </form>
           <h1>{props.defualtcity}</h1>
           <ul className="date">
-            <li>wednessday 19:00</li>
+            <li>{weatherData.date}</li>
             <li>{weatherData.description}</li>
           </ul>
           <div className="description">

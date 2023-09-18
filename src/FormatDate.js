@@ -1,5 +1,5 @@
 import React from "react";
 
-export defualt function FormatDate(props) {
+export default function FormatDate(props) {
 	return "Wednessday 11:00"
 }

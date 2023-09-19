@@ -3,10 +3,11 @@ import "./Weather.css";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from "axios";
-import FormatDate from "./FormatDate";
+import WeatherInfo from "./WeatherInfo";
+
 export default function Weather(props) {
-  const [ready, setReady] = useState(false)
-  const [weatherData, setWeatherData] = useState({})
+  const [weatherData, setWeatherData] = useState({ready:false})
+  const [city, setCity] = useState(props.defualtcity)
 
   function handleWeather(response) {
     console.log(response.data)
@@ -17,44 +18,40 @@ export default function Weather(props) {
       humidity: response.data.temperature.humidity,
       description: response.data.condition.description,
       icon_url: response.data.condition.icon_url,
-      icon_description: response.data.condition.icon
+      icon_description: response.data.condition.icon,
+      city: response.data.city
 
   })
-    setReady(true)
+  }
+  function search() {
+    const key = "68ed940b3b921df8ccf6e6331of75tba"
+    let url = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${key}&units=metric`
+    axios.get(url).then(handleWeather)
+  }
+  function handleSubmit(event) {
+    event.preventDefualt();
+    search();
+  }
+
+  function handleChange(event) {
+    setCity(event.target.value)
   }
  
-  if (ready) {
+  if (weatherData.ready) {
     return (
       <div className="weather text-capitalize">
         <div className="contanier">
-          <form>
+          <form onSubmit={handleSubmit}>
             <Row>
               <Col xs={12} md={8}>
-            <input className="searchEngine border" distype="search" placeholder="Enter city.." />
+            <input onChange={handleChange} className="searchEngine border" distype="search" placeholder="Enter city.." />
             </Col>
             <Col xs={6} md={4}>
             <input className="btn btn-primary button"  type="submit" value="Search" />
             </Col>
             </Row>
           </form>
-          <h1>{props.defualtcity}</h1>
-          <ul className="date">
-            <li><FormatDate date={weatherData.date}/></li>
-            <li>{weatherData.description}</li>
-          </ul>
-          <div className="description">
-              <img
-                src="https://ssl.gstatic.com/onebox/weather/64/sunny.png"
-                alt=""
-              />
-              <span className="temperature">{Math.round(weatherData.temparature)}</span>
-              <span className="units">℃|℉</span>
-              <ul>
-                <li>Humidity: {weatherData.humidity}%</li>
-                <li>Percipitaion: 10%</li>
-                <li>Wind Speed: {weatherData.wind}km/h</li>
-              </ul>
-          </div>
+          <WeatherInfo data={weatherData}/>
           <div className="row forcast">
             <div className="col-2 day p-2">
               <p>Monday</p>
@@ -77,7 +74,7 @@ export default function Weather(props) {
               </p>
             </div>
             <div className="col-2 day p-2">
-              <p>Wednessday</p>
+              <p>Wednesday</p>
               <img
                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAAm9JREFUaN7tmcFthDAQRbcESqAEl0ADkSiBY46UQAmUQAl0EErwdW+kA3fgjKNhNXJsGNvYyyqL9A/ZQPKf/Wc8JDet9e2V9dLm3wCXBAi57ve7AA2WxC3jdQoAGpcg7ZHMBZIMAMa6HeO2uksBgKEmwPwmcSUAGQGwXAIAc68jNYFW6zPz9QiqSgEMCQB7UqDWa/j7U5wFMGYC2NQ6zPeg7lUAFI2TWXmQBtXJAOYHY451ZvVovgJJ0JpcA5h9VcC83HYAjE+4+lM0AK66LGB8i49A8y2a13b+QwFKmX+c2CbvIEUA6iiAjC3TpZkUriTm16hzAKOjCplfSe4HYt6Zfy5AV3D1t9w3lnln/rkApeIzkJapHAD1lQEWkvvZYX6NnoUKACiS+95h/hcAa8KtJwM01qgQqkMAkdH8aI0KoeYl9xxYcowKJPdT5OoLLkCTIfe1Y1QIUX/aXyVyXTtwyynvxB9f9wrUhBqDZwSoZgC4oqXomRANAAYGkEZVTOMGWOEzIwNAHZ3IUQBm9Yh5zd0FuG8izywH5l1tdT7lpd78cmJk5eyAgbSg+wOA0RGdKhkAfnFrGWmZqy/JM5IRH/tcaKNGCUeGV18MzKqCZlDn+JwdOXyRoebH6Flop3A17STWzsyewjWaGKvfW3NQlQzgKNxhZ2dmT+EqTr1YE+n+bgUAzL7C9e0M9nt24ZK56DGoHd4fCdAyd0aEFK51+vLuDwDoEKIPaan4/dHAMAG201ecCuBpjVEtlXH69uz7E0aJ3ZYaaV7QQS03QONrqQkAg+/lPdcO/Cnc0ldqDTTcSfRpAO//1L8B/hnAD9B4AcpTDEFdAAAAAElFTkSuQmCC"
                 alt=""
@@ -111,8 +108,6 @@ export default function Weather(props) {
       </div>
     );
   } else {
-    const key = "68ed940b3b921df8ccf6e6331of75tba"
-    let url = `https://api.shecodes.io/weather/v1/current?query=${props.defualtcity}&key=${key}&units=metric`
-    axios.get(url).then(handleWeather)
+    search();
   }
 }

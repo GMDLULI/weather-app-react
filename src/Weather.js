@@ -12,22 +12,33 @@ export default function Weather(props) {
   function handleWeather(response) {
     console.log(response.data)
     setWeatherData({
-      date: new Date(response.data.time * 1000),
-      temparature: response.data.temperature.current,
+      // date: new Date(response.data.time * 1000),
+      // temparature: response.data.temperature.current,
+      // wind: response.data.wind.speed,
+      // humidity: response.data.temperature.humidity,
+      // description: response.data.condition.description,
+      // icon_url: response.data.condition.icon_url,
+      // icon_description: response.data.condition.icon,
+      // city: response.data.city
+      city:response.data.name,
+      date: new Date(response.data.dt * 1000),
+      temparature: response.data.main.temp,
       wind: response.data.wind.speed,
-      humidity: response.data.temperature.humidity,
-      description: response.data.condition.description,
-      icon_url: response.data.condition.icon_url,
-      icon_description: response.data.condition.icon,
-      city: response.data.city
+      humidity: response.data.main.humidity,
+      description: response.data.weather[0].description
 
   })
   }
   function search() {
-    const key = "68ed940b3b921df8ccf6e6331of75tba"
-    let url = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${key}&units=metric`
-    axios.get(url).then(handleWeather)
+  //   const key = "68ed940b3b921df8ccf6e6331of75tba"
+  //   let url = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${key}&units=metric`
+  //   axios.get(url).then(handleWeather)
+
+  const key = "1289cd044582d3271e980de23db4457d"
+  let url =`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`
+  axios.get(url).then(handleWeather)
   }
+
   function handleSubmit(event) {
     event.preventDefualt();
     search();
